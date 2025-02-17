@@ -1,0 +1,24 @@
+*terminaider.txt*  A terminal wrapper for aider
+
+==============================================================================
+INTRODUCTION                                                    *terminaider*
+
+Terminaider is a Vim plugin that provides a persistent terminal interface for
+the aider command-line tool.
+
+==============================================================================
+COMMANDS                                                       *terminaider-commands*
+
+:Terminaider [args]                                          *:Terminaider*
+    Opens a terminal window running aider with the specified arguments.
+    If aider is already running, shows its window.
+
+:TerminaiderHide                                             *:TerminaiderHide*
+    Hides the aider terminal window if it's visible.
+
+==============================================================================
+CONFIGURATION                                                 *terminaider-config*
+
+g:terminaider_width                                          *g:terminaider_width*
+    Width of the terminal window in columns.
+    Default: 80
