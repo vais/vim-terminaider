@@ -57,7 +57,7 @@ function! s:OnTermExit(job_id, status) abort
     let s:term_buf = -1
 endfunction
 
-function! s:CloseTerminal() abort
+function! s:HideTerminal() abort
     if s:term_buf != -1
         let l:win_id = bufwinid(s:term_buf)
         if l:win_id != -1
@@ -67,5 +67,31 @@ function! s:CloseTerminal() abort
     endif
 endfunction
 
+function! s:AddCurrentFile() abort
+    " Check if aider is running
+    if s:term_buf == -1 || !bufexists(s:term_buf) || term_getstatus(s:term_buf) !~# 'running'
+        echohl ErrorMsg
+        echo "Error: Aider is not running"
+        echohl None
+        return
+    endif
+    
+    " Get absolute path of current buffer
+    let l:path = fnamemodify(expand('%:p'), ':p')
+    
+    " Check if file exists and is readable
+    if !filereadable(l:path)
+        echohl ErrorMsg
+        echo "Error: File not readable: " . l:path
+        echohl None
+        return
+    endif
+
+    " Feed the /add command followed by the path
+    echo "Adding " . l:path . " to the chat"
+    call term_sendkeys(s:term_buf, "/add " . l:path . "\<CR>")
+endfunction
+
 command! -nargs=* Terminaider call s:OpenTerminal(<q-mods>, <q-args>)
-command! -nargs=0 TerminaiderHide call s:CloseTerminal()
+command! -nargs=0 TerminaiderHide call s:HideTerminal()
+command! -nargs=0 TerminaiderAddCurrentFile call s:AddCurrentFile()
