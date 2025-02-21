@@ -87,6 +87,17 @@ function! s:AddCurrentFile() abort
         return
     endif
 
+    " Get the last line of terminal output
+    let l:last_line = term_getline(s:term_buf, '.')
+    
+    " Check if the last line matches the aider prompt pattern
+    if l:last_line !~# '^[a-z]*>  $'
+        echohl ErrorMsg
+        echo "Error: Aider appears busy, check the prompt"
+        echohl None
+        return
+    endif
+
     " Feed the /add command followed by the path
     echo "Adding " . l:path . " to the chat"
     call term_sendkeys(s:term_buf, "/add " . l:path . "\<CR>")
