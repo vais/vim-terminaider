@@ -67,15 +67,34 @@ function! s:HideTerminal() abort
     endif
 endfunction
 
-function! s:AddCurrentFile() abort
+function! s:CheckAiderReady() abort
     " Check if aider is running
     if s:term_buf == -1 || !bufexists(s:term_buf) || term_getstatus(s:term_buf) !~# 'running'
         echohl ErrorMsg
         echo "Error: Aider is not running"
         echohl None
-        return
+        return 0
     endif
     
+    " Get the last line of terminal output
+    let l:last_line = term_getline(s:term_buf, '.')
+    
+    " Check if the last line matches the aider prompt pattern
+    if l:last_line !~# '^[a-z]*>  $'
+        echohl ErrorMsg
+        echo "Error: Aider appears busy, check the prompt"
+        echohl None
+        return 0
+    endif
+
+    return 1
+endfunction
+
+function! s:AddCurrentFile() abort
+    if !s:CheckAiderReady()
+        return
+    endif
+
     " Get absolute path of current buffer
     let l:path = fnamemodify(expand('%:p'), ':p')
     
@@ -87,22 +106,25 @@ function! s:AddCurrentFile() abort
         return
     endif
 
-    " Get the last line of terminal output
-    let l:last_line = term_getline(s:term_buf, '.')
-    
-    " Check if the last line matches the aider prompt pattern
-    if l:last_line !~# '^[a-z]*>  $'
-        echohl ErrorMsg
-        echo "Error: Aider appears busy, check the prompt"
-        echohl None
-        return
-    endif
-
     " Feed the /add command followed by the path
     echo "Adding " . l:path . " to the chat"
     call term_sendkeys(s:term_buf, "/add " . l:path . "\<CR>")
 endfunction
 
+function! s:DropCurrentFile() abort
+    if !s:CheckAiderReady()
+        return
+    endif
+
+    " Get absolute path of current buffer
+    let l:path = fnamemodify(expand('%:p'), ':p')
+    
+    " Feed the /drop command followed by the path
+    echo "Dropping " . l:path . " from the chat"
+    call term_sendkeys(s:term_buf, "/drop " . l:path . "\<CR>")
+endfunction
+
 command! -nargs=* Terminaider call s:OpenTerminal(<q-mods>, <q-args>)
 command! -nargs=0 TerminaiderHide call s:HideTerminal()
-command! -nargs=0 TerminaiderAddCurrentFile call s:AddCurrentFile()
+command! -nargs=0 TerminaiderAdd call s:AddCurrentFile()
+command! -nargs=0 TerminaiderDrop call s:DropCurrentFile()

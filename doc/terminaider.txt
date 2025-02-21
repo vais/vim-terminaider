@@ -16,8 +16,11 @@ COMMANDS                                                       *terminaider-comm
 :TerminaiderHide                                             *:TerminaiderHide*
     Hides the aider terminal window if it's visible.
 
-:TerminaiderAddCurrentFile                                   *:TerminaiderAddCurrentFile*
+:TerminaiderAdd                                              *:TerminaiderAdd*
     Adds the current buffer's file to aider using the /add command.
+
+:TerminaiderDrop                                             *:TerminaiderDrop*
+    Removes the current buffer's file from aider using the /drop command.
 
 ==============================================================================
 CONFIGURATION                                                 *terminaider-config*
