@@ -70,7 +70,7 @@ endfunction
 function! s:CheckAiderReady() abort
     " Check if aider is running
     if s:term_buf == -1 || !bufexists(s:term_buf) || term_getstatus(s:term_buf) !~# 'running'
-        echohl ErrorMsg
+        echohl Error
         echo "Error: Aider is not running"
         echohl None
         return 0
@@ -81,7 +81,7 @@ function! s:CheckAiderReady() abort
     
     " Check if the last line matches the aider prompt pattern
     if l:last_line !~# '^[a-z]*>  $'
-        echohl ErrorMsg
+        echohl Error
         echo "Error: Aider appears busy, check the prompt"
         echohl None
         return 0
@@ -92,7 +92,7 @@ endfunction
 
 function! s:CheckFileReadable(path) abort
     if !filereadable(a:path)
-        echohl ErrorMsg
+        echohl Error
         echo "Error: File not readable: " . a:path
         echohl None
         return 0
