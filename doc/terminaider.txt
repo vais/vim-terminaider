@@ -19,6 +19,9 @@ COMMANDS                                                       *terminaider-comm
 :TerminaiderAdd                                              *:TerminaiderAdd*
     Adds the current buffer's file to aider using the /add command.
 
+:TerminaiderAddReadOnly                                      *:TerminaiderAddReadOnly*
+    Adds the current buffer's file to aider as read-only using the /read-only command.
+
 :TerminaiderDrop                                             *:TerminaiderDrop*
     Removes the current buffer's file from aider using the /drop command.
 
