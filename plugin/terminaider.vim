@@ -91,6 +91,7 @@ function! s:CheckAiderReady() abort
 endfunction
 
 function! s:CheckFileReadable(path) abort
+    " Check if file exists and has read permissions before proceeding
     if !filereadable(a:path)
         echohl Error
         echo "Error: File not readable: " . a:path
