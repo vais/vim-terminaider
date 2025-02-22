@@ -90,6 +90,16 @@ function! s:CheckAiderReady() abort
     return 1
 endfunction
 
+function! s:CheckFileReadable(path) abort
+    if !filereadable(a:path)
+        echohl ErrorMsg
+        echo "Error: File not readable: " . a:path
+        echohl None
+        return 0
+    endif
+    return 1
+endfunction
+
 function! s:AddCurrentFile() abort
     if !s:CheckAiderReady()
         return
@@ -98,11 +108,7 @@ function! s:AddCurrentFile() abort
     " Get absolute path of current buffer
     let l:path = fnamemodify(expand('%:p'), ':p')
     
-    " Check if file exists and is readable
-    if !filereadable(l:path)
-        echohl ErrorMsg
-        echo "Error: File not readable: " . l:path
-        echohl None
+    if !s:CheckFileReadable(l:path)
         return
     endif
 
@@ -119,11 +125,7 @@ function! s:AddCurrentFileReadOnly() abort
     " Get absolute path of current buffer
     let l:path = fnamemodify(expand('%:p'), ':p')
     
-    " Check if file exists and is readable
-    if !filereadable(l:path)
-        echohl ErrorMsg
-        echo "Error: File not readable: " . l:path
-        echohl None
+    if !s:CheckFileReadable(l:path)
         return
     endif
 
