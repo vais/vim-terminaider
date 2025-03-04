@@ -31,3 +31,21 @@ CONFIGURATION                                                 *terminaider-confi
 g:terminaider_width                                          *g:terminaider_width*
     Width of the terminal window in columns.
     Default: 80
+
+==============================================================================
+FOLDING AND NAVIGATION                                        *terminaider-folding*
+
+Terminaider automatically sets up folding in the terminal buffer based on aider
+prompts. Each conversation segment (from one prompt to the next) is folded as a
+unit, making it easier to navigate through the chat history.
+
+When in normal mode in the terminal buffer, the following mappings are available:
+
+<C-n>                                                        *terminaider-next*
+    Move to the next fold (conversation segment) and open it if closed.
+
+<C-p>                                                        *terminaider-prev*
+    Move to the previous fold (conversation segment), open it if closed, and
+    position the cursor at the start of the fold.
+
+Folding is automatically enabled when switching from terminal mode to normal mode.

@@ -11,6 +11,9 @@ endif
 " Terminal buffer number
 let s:term_buf = -1
 
+" Aider prompt pattern
+let s:aider_prompt_pattern = '^[a-z]*>'
+
 function! s:OpenTerminal(mods, args) abort
     " If terminal buffer exists and is valid
     if s:term_buf != -1 && bufexists(s:term_buf) && term_getstatus(s:term_buf) =~# 'running'
@@ -51,6 +54,24 @@ function! s:OpenTerminal(mods, args) abort
 
     " Out of abundance of caution
     setlocal bufhidden=hide
+
+    " Fold on aider prompt pattern
+    setlocal foldmethod=expr
+    setlocal foldexpr=getline(v:lnum)=~s:aider_prompt_pattern?'>1':1
+    setlocal foldtext=foldtext()
+    setlocal foldlevel=1
+
+    " Set up autocmd to make content foldable when switching from terminal to normal mode
+    augroup TerminaiderFolding
+        autocmd! * <buffer>
+        autocmd ModeChanged <buffer> if mode() == 'n' | setlocal foldmethod=expr | endif
+    augroup END
+
+    " Move to next fold and open it if closed
+    nmap <buffer> <C-n> zj:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>
+    
+    " Move to previous fold, open it if closed, then go to start of fold
+    nmap <buffer> <C-p> zk:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>[z
 endfunction
 
 function! s:OnTermExit(job_id, status) abort
@@ -80,7 +101,7 @@ function! s:CheckAiderReady() abort
     let l:last_line = term_getline(s:term_buf, '.')
     
     " Check if the last line matches the aider prompt pattern
-    if l:last_line !~# '^[a-z]*>  $'
+    if l:last_line !~# s:aider_prompt_pattern . '  $'
         echohl Error
         echo "Error: Aider appears busy, check the prompt"
         echohl None
