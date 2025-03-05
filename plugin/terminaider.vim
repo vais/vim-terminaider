@@ -64,6 +64,9 @@ function! s:OpenTerminal(mods, args) abort
     setlocal foldtext=foldtext()
     setlocal foldlevel=1
 
+    " Protect buffer from being accidentally replaced by :e
+    cnoremap <buffer> e<CR> <CR>
+
     " Set up autocmd to make content foldable when switching from terminal to normal mode
     augroup TerminaiderFolding
         autocmd! * <buffer>
