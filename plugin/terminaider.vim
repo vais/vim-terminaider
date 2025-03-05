@@ -52,8 +52,11 @@ function! s:OpenTerminal(mods, args) abort
     setlocal norelativenumber
     setlocal signcolumn=no
 
-    " Out of abundance of caution
+    " Make sure buffer doesn't get unloaded when hidden
     setlocal bufhidden=hide
+
+    " Make sure buffer doesn't show up in buffer list
+    setlocal nobuflisted
 
     " Fold on aider prompt pattern
     setlocal foldmethod=expr
