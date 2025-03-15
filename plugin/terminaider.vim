@@ -12,7 +12,7 @@ endif
 let s:term_buf = -1
 
 " Aider prompt pattern
-let s:aider_prompt_pattern = '^[a-z]*>'
+let s:aider_prompt_pattern = '^[a-z-]*>\ '
 
 function! s:OpenTerminal(mods, args) abort
     " If terminal buffer exists and is valid
@@ -107,7 +107,7 @@ function! s:CheckAiderReady() abort
     let l:last_line = term_getline(s:term_buf, '.')
     
     " Check if the last line matches the aider prompt pattern
-    if l:last_line !~# s:aider_prompt_pattern . '  $'
+    if l:last_line !~# s:aider_prompt_pattern . ' $'
         echohl Error
         echo "Error: Aider appears busy, check the prompt"
         echohl None
