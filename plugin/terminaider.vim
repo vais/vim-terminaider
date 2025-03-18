@@ -38,7 +38,7 @@ function! s:OpenTerminal(mods, args) abort
     let s:term_buf = term_start(['aider'] + split(a:args), {
                 \ 'exit_cb': function('s:OnTermExit'),
                 \ 'curwin': 1,
-                \ 'term_finish': 'close'
+                \ 'term_finish': 'open'
                 \ })
 
     " Set a static termwinsize to work around the issue with vim terminal
@@ -81,6 +81,18 @@ function! s:OpenTerminal(mods, args) abort
 endfunction
 
 function! s:OnTermExit(job_id, status) abort
+    if a:status == 0
+        " If aider exited successfully, close buffer
+        execute 'bdelete! ' . s:term_buf
+    else
+        " If aider exited with error, keep buffer open
+        echohl WarningMsg
+        echo "Aider exited with status " . a:status
+        echohl None
+
+        " Make sure buffer shows up in buffer list now
+        setlocal buflisted
+    endif
     let s:term_buf = -1
 endfunction
 
