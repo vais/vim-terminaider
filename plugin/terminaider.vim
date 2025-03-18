@@ -31,6 +31,10 @@ function! s:OpenTerminal(mods, args) abort
         return
     endif
 
+    " Set environment variables for aider theme based on vim background
+    let $AIDER_DARK_MODE = &background == 'dark' ? 'true' : 'false'
+    let $AIDER_LIGHT_MODE = &background == 'dark' ? 'false' : 'true'
+    
     " Create new terminal window
     execute 'vertical botright ' . g:terminaider_width . 'new'
     
