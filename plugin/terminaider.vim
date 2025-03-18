@@ -11,6 +11,9 @@ endif
 " Terminal buffer number
 let s:term_buf = -1
 
+" Store the arguments used to start aider
+let s:current_args = ''
+
 " Aider prompt pattern
 let s:aider_prompt_pattern = '^[a-z-]*>\ '
 
@@ -37,6 +40,9 @@ function! s:OpenTerminal(mods, args) abort
     
     " Create new terminal window
     execute 'vertical botright ' . g:terminaider_width . 'new'
+    
+    " Store the arguments for potential restart
+    let s:current_args = a:args
     
     " Start terminal in current window
     let s:term_buf = term_start(['aider'] + split(a:args), {
@@ -114,7 +120,7 @@ function! s:CheckAiderReady() abort
     " Check if aider is running
     if s:term_buf == -1 || !bufexists(s:term_buf) || term_getstatus(s:term_buf) !~# 'running'
         echohl Error
-        echo "Error: Aider is not running"
+        echo "Aider is not running"
         echohl None
         return 0
     endif
@@ -125,7 +131,7 @@ function! s:CheckAiderReady() abort
     " Check if the last line matches the aider prompt pattern
     if l:last_line !~# s:aider_prompt_pattern . ' $'
         echohl Error
-        echo "Error: Aider appears busy, check the prompt"
+        echo "Aider appears busy, check the prompt"
         echohl None
         return 0
     endif
@@ -137,7 +143,7 @@ function! s:CheckFileReadable(path) abort
     " Check if file exists and has read permissions before proceeding
     if !filereadable(a:path)
         echohl Error
-        echo "Error: File not readable: " . a:path
+        echo "File not readable: " . a:path
         echohl None
         return 0
     endif
@@ -205,10 +211,47 @@ function! s:ExitAider() abort
     endif
 endfunction
 
+function! s:ToggleRepoMap() abort
+    " Check if AIDER_MAP_TOKENS is set to 0
+    if $AIDER_MAP_TOKENS == '0'
+        " Actually unset the variable using :unlet
+        unlet $AIDER_MAP_TOKENS
+        echo "AIDER_MAP_TOKENS is now unset (default behavior)"
+    else
+        " Set the variable to 0
+        let $AIDER_MAP_TOKENS = '0'
+        echo "AIDER_MAP_TOKENS is now set to 0 (disabled)"
+    endif
+    
+    " Check if aider is running and ready
+    if !s:CheckAiderReady()
+        " Aider is not running or not ready, just return
+        return
+    endif
+    
+    " Ask if user wants to restart aider
+    let l:choice = confirm("Restart aider for changes to take effect?", "&Yes\n&No", 1)
+    
+    if l:choice == 1
+        " Send exit command
+        call term_sendkeys(s:term_buf, "/exit\<CR>")
+        
+        " Wait for aider to exit
+        echo "Waiting for aider to exit..."
+        while s:term_buf != -1
+            sleep 100m
+        endwhile
+        
+        " Start aider again with the stored arguments
+        call s:OpenTerminal('', s:current_args)
+    endif
+endfunction
+
 command! -nargs=* Terminaider call s:OpenTerminal(<q-mods>, <q-args>)
 command! -nargs=0 TerminaiderHide call s:HideTerminal()
 command! -nargs=0 TerminaiderAdd call s:AddCurrentFile()
 command! -nargs=0 TerminaiderAddReadOnly call s:AddCurrentFileReadOnly()
 command! -nargs=0 TerminaiderDrop call s:DropCurrentFile()
 command! -nargs=0 TerminaiderExit call s:ExitAider()
+command! -nargs=0 TerminaiderToggleRepoMap call s:ToggleRepoMap()
 

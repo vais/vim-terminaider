@@ -28,6 +28,11 @@ COMMANDS                                                       *terminaider-comm
 :TerminaiderExit                                             *:TerminaiderExit*
     Prompts for confirmation, then exits aider using the /exit command.
 
+:TerminaiderToggleRepoMap                                    *:TerminaiderToggleRepoMap*
+    Toggles AIDER_MAP_TOKENS environment variable between unset and zero.
+    Setting AIDER_MAP_TOKENS to zero effectively disables repo map.
+    Offers to restart aider for changes to take effect.
+
 ==============================================================================
 CONFIGURATION                                                 *terminaider-config*
 
