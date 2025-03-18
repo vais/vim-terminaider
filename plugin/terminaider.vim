@@ -187,9 +187,24 @@ function! s:DropCurrentFile() abort
     call term_sendkeys(s:term_buf, "/drop " . l:path . "\<CR>")
 endfunction
 
+function! s:ExitAider() abort
+    if !s:CheckAiderReady()
+        return
+    endif
+
+    " Prompt user for confirmation
+    let l:choice = confirm("Are you sure you want to exit aider?", "&Yes\n&No", 2)
+    
+    " If user confirmed (chose "Yes")
+    if l:choice == 1
+        call term_sendkeys(s:term_buf, "/exit\<CR>")
+    endif
+endfunction
+
 command! -nargs=* Terminaider call s:OpenTerminal(<q-mods>, <q-args>)
 command! -nargs=0 TerminaiderHide call s:HideTerminal()
 command! -nargs=0 TerminaiderAdd call s:AddCurrentFile()
 command! -nargs=0 TerminaiderAddReadOnly call s:AddCurrentFileReadOnly()
 command! -nargs=0 TerminaiderDrop call s:DropCurrentFile()
+command! -nargs=0 TerminaiderExit call s:ExitAider()
 

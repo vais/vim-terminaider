@@ -25,6 +25,9 @@ COMMANDS                                                       *terminaider-comm
 :TerminaiderDrop                                             *:TerminaiderDrop*
     Removes the current buffer's file from aider using the /drop command.
 
+:TerminaiderExit                                             *:TerminaiderExit*
+    Prompts for confirmation, then exits aider using the /exit command.
+
 ==============================================================================
 CONFIGURATION                                                 *terminaider-config*
 
