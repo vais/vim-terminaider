@@ -56,6 +56,9 @@ function! s:OpenTerminal(mods, args) abort
     " with Aider sometimes getting confused when terminal width changes
     execute "setlocal termwinsize=" . winheight(0) . "x" . g:terminaider_width
 
+    " Keep window width when windows are equalized
+    setlocal winfixwidth
+
     " We don't want any of these in the terminal buffer - this way when
     " we go from terminal to normal mode, buffer width remains the same
     setlocal nonumber
