@@ -116,12 +116,16 @@ function! s:HideTerminal() abort
     endif
 endfunction
 
-function! s:CheckAiderReady() abort
+function! s:CheckAiderReady(...)
+    let l:silent = a:0 > 0 ? a:1 : 0
+    
     " Check if aider is running
     if s:term_buf == -1 || !bufexists(s:term_buf) || term_getstatus(s:term_buf) !~# 'running'
-        echohl Error
-        echo "Aider is not running"
-        echohl None
+        if !l:silent
+            echohl Error
+            echo "Aider is not running"
+            echohl None
+        endif
         return 0
     endif
     
@@ -224,7 +228,7 @@ function! s:ToggleRepoMap() abort
     endif
     
     " Check if aider is running and ready
-    if !s:CheckAiderReady()
+    if !s:CheckAiderReady(1)
         " Aider is not running or not ready, just return
         return
     endif
