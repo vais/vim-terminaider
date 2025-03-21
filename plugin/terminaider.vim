@@ -84,10 +84,10 @@ function! s:OpenTerminal(mods, args) abort
     augroup END
 
     " Move to next fold and open it if closed
-    nmap <buffer> <C-n> zj:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>
+    nmap <buffer> <C-n> zj:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>zt
     
     " Move to previous fold, open it if closed, then go to start of fold
-    nmap <buffer> <C-p> zk:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>[z
+    nmap <buffer> <C-p> zk:if foldclosed('.') != -1 \| execute 'normal! zmza' \| endif<CR>[zzt
 endfunction
 
 function! s:OnTermExit(job_id, status) abort
