@@ -54,7 +54,7 @@ function! s:OpenTerminal(mods, args) abort
     " Set a static termwinsize to work around the issue with vim terminal
     " cutting off scrollback when a vertical split is resized, as well as
     " with Aider sometimes getting confused when terminal width changes
-    execute "setlocal termwinsize=0x" . g:terminaider_width
+    execute "setlocal termwinsize=" . winheight(0) . "x" . g:terminaider_width
 
     " We don't want any of these in the terminal buffer - this way when
     " we go from terminal to normal mode, buffer width remains the same
