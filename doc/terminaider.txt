@@ -40,6 +40,14 @@ g:terminaider_width                                          *g:terminaider_widt
     Width of the terminal window in columns.
     Default: 80
 
+FILETYPE                                                     *terminaider-filetype*
+
+Terminaider sets a custom filetype 'terminaider' for the terminal buffer. This
+allows for ftplugin customization by creating files like:
+    - ftplugin/terminaider.vim
+    - after/ftplugin/terminaider.vim
+    - syntax/terminaider.vim
+
 ==============================================================================
 FOLDING AND NAVIGATION                                        *terminaider-folding*
 

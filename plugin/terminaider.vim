@@ -51,6 +51,9 @@ function! s:OpenTerminal(mods, args) abort
                 \ 'term_finish': 'open'
                 \ })
 
+    " Set a custom filetype to allow ftplugin customization
+    setlocal filetype=terminaider
+
     " Set a static termwinsize to work around the issue with vim terminal
     " cutting off scrollback when a vertical split is resized, as well as
     " with Aider sometimes getting confused when terminal width changes
