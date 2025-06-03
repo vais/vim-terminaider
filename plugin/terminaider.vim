@@ -76,7 +76,7 @@ function! s:OpenTerminal(mods, args) abort
 
     " Fold on aider prompt pattern
     setlocal foldmethod=expr
-    setlocal foldexpr=getline(v:lnum)=~s:aider_prompt_pattern?'>1':1
+    setlocal foldexpr=getline(v:lnum)=~s:aider_prompt_pattern&&(v:lnum==1\|\|getline(v:lnum-1)!~s:aider_prompt_pattern)?'>1':1
     setlocal foldtext=foldtext()
     setlocal foldlevel=1
 
